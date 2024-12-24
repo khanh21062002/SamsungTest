@@ -1,0 +1,51 @@
+package QUE1E;
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = Integer.parseInt(sc.nextLine());
+		for ( int testcase = 0 ; testcase < t ; testcase++){
+			int N = sc.nextInt();
+			
+			int[] heights = new int[N];
+			int[] tallerCounts = new int[N];
+			
+			for (int i = 0; i < N; i++) {
+                heights[i] = sc.nextInt();
+            }
+            for (int i = 0; i < N; i++) {
+                tallerCounts[i] = sc.nextInt();
+            }
+
+            // To store the final queue order
+            int[] queue = new int[N];
+
+            // Place each person in the correct position
+            for (int i = 0; i < N; i++) {
+                int tallerCount = tallerCounts[i];
+                int position = 0;
+
+                // Find the correct position for the current person
+                while (tallerCount > 0 || queue[position] != 0) {
+                    if (queue[position] == 0) {
+                        tallerCount--;
+                    }
+                    position++;
+                }
+
+                // Place the person at the calculated position
+                queue[position] = heights[i];
+            }
+
+            // Print the result for the current test case
+            for (int i = 0; i < N; i++) {
+                System.out.print(queue[i] + " ");
+            }
+            System.out.println();
+		}
+		sc.close();
+	}
+}

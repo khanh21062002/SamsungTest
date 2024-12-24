@@ -1,0 +1,56 @@
+package BLDTWR;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+	 public static void main(String[] args) {
+	        Scanner sc = new Scanner(System.in);
+	        int T = sc.nextInt(); // Số lượng test case
+	        
+	        for (int t = 1; t <= T; t++) {
+	            // Đọc dữ liệu đầu vào cho mỗi test case
+	            int N = sc.nextInt(); // Tổng số viên gạch
+	            int M1 = sc.nextInt(); // Số tầng của tháp 1
+	            int M2 = sc.nextInt(); // Số tầng của tháp 2
+
+	            int[] bricks = new int[N];
+	            for (int i = 0; i < N; i++) {
+	                bricks[i] = sc.nextInt();
+	            }
+
+	            // Sắp xếp các viên gạch theo thứ tự giảm dần cân nặng
+	            Arrays.sort(bricks);
+	            int[] sortedBricks = reverseArray(bricks);
+
+	            // Tính chi phí xây dựng tháp 1
+	            int costTower1 = 0;
+	            for (int i = 0; i < M1; i++) {
+	                costTower1 += sortedBricks[i] * (M1 - i); // Viên gạch nặng nhất đặt ở tầng thấp nhất
+	            }
+
+	            // Tính chi phí xây dựng tháp 2
+	            int costTower2 = 0;
+	            for (int i = M1; i < M1 + M2; i++) {
+	                costTower2 += sortedBricks[i] * (M1 + M2 - i); // Tương tự cho tháp 2
+	            }
+
+	            // Tổng chi phí
+	            int totalCost = costTower1 + costTower2;
+
+	            // In ra kết quả cho test case này
+	            System.out.println("#" + t + " " + totalCost);
+	        }
+	        sc.close();
+	    }
+
+	    // Hàm đảo ngược mảng (để có thứ tự giảm dần)
+	    public static int[] reverseArray(int[] array) {
+	        int[] reversed = new int[array.length];
+	        for (int i = 0; i < array.length; i++) {
+	            reversed[i] = array[array.length - 1 - i];
+	        }
+	        return reversed;
+	    }
+}

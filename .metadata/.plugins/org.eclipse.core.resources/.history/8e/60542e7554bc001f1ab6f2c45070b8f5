@@ -1,0 +1,47 @@
+package PROB03;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+        int T = scanner.nextInt(); // Số lượng test case
+
+        for (int t = 1; t <= T; t++) {
+            int H = scanner.nextInt(); // Chiều cao của hình chữ nhật
+            int W = scanner.nextInt(); // Chiều rộng của hình chữ nhật
+            int M = scanner.nextInt(); // Số hàng của ma trận
+            int N = scanner.nextInt(); // Số cột của ma trận
+
+            int[][] matrix = new int[M][N];
+            int[][] prefix = new int[M + 1][N + 1];
+
+            // Nhập ma trận và tính mảng tổng cộng dồn chỉ cho số chẵn
+            for (int i = 0; i < M; i++) {
+                for (int j = 0; j < N; j++) {
+                    matrix[i][j] = scanner.nextInt();
+                    int evenValue = (matrix[i][j] % 2 == 0) ? matrix[i][j] : 0;
+                    prefix[i + 1][j + 1] = evenValue + prefix[i][j + 1] + prefix[i + 1][j] - prefix[i][j];
+                }
+            }
+
+            // Tìm tổng lớn nhất của hình chữ nhật H * W
+            int maxEvenSum = 0;
+            for (int i = H; i <= M; i++) {
+                for (int j = W; j <= N; j++) {
+                    // Tính tổng số chẵn trong hình chữ nhật (i-H+1, j-W+1) -> (i, j)
+                    int currentSum = prefix[i][j]
+                            - prefix[i - H][j]
+                            - prefix[i][j - W]
+                            + prefix[i - H][j - W];
+                    maxEvenSum = Math.max(maxEvenSum, currentSum);
+                }
+            }
+
+            // In kết quả cho test case hiện tại
+            System.out.println("#" + t + " " + maxEvenSum);
+        }
+
+        scanner.close();
+	}
+}

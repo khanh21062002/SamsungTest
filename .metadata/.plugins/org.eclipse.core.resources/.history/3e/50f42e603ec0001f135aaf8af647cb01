@@ -1,0 +1,77 @@
+package OTTGAME;
+
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Main {
+	
+	private static int determineWinningMove(Set<Integer> moves) {
+        // 1: Kéo, 2: Búa, 3: Bao
+        if (moves.contains(1) && moves.contains(2)) return 2; // Búa thắng Kéo
+        if (moves.contains(2) && moves.contains(3)) return 3; // Bao thắng Búa
+        if (moves.contains(1) && moves.contains(3)) return 1; // Kéo thắng Bao
+        return -1;
+    }
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int T = Integer.parseInt(sc.nextLine());
+		for (int tc = 1 ; tc <= T; T--) {
+			int N = Integer.parseInt(sc.nextLine());
+			int Q = Integer.parseInt(sc.nextLine());
+			int[][] moves = new int[Q][N]; // Lưu các nước đi
+            boolean[] eliminated = new boolean[N]; // Đánh dấu người chơi bị loại
+
+            // Đọc các nước đi cho mỗi lượt
+            for (int q = 0; q < Q; q++) {
+                for (int i = 0; i < N; i++) {
+                    moves[q][i] = sc.nextInt();
+                }
+            }
+
+            // Xử lý từng lượt chơi
+            for (int q = 0; q < Q; q++) {
+                // Đếm số người chơi còn lại và các loại nước đi
+                Set<Integer> activePlayers = new HashSet<>();
+                Set<Integer> moveTypes = new HashSet<>();
+                
+                for (int i = 0; i < N; i++) {
+                    if (!eliminated[i]) {
+                        activePlayers.add(i);
+                        moveTypes.add(moves[q][i]);
+                    }
+                }
+
+                // Nếu chỉ còn 1 người chơi, bỏ qua lượt này
+                if (activePlayers.size() <= 1) continue;
+
+                // Xử lý kết quả của lượt chơi
+                if (moveTypes.size() == 1 || moveTypes.size() == 3) {
+                    // Hòa - không ai bị loại
+                    continue;
+                } else {
+                    // Có người thắng người thua
+                    int winning = determineWinningMove(moveTypes);
+                    // Loại những người thua
+                    for (int player : activePlayers) {
+                        if (moves[q][player] != winning) {
+                            eliminated[player] = true;
+                        }
+                    }
+                }
+            }
+
+            // In kết quả
+            StringBuilder result = new StringBuilder("#" + tc);
+            for (int i = 0; i < N; i++) {
+                if (!eliminated[i]) {
+                    result.append(" ").append(i + 1);
+                }
+            }
+            System.out.println(result);
+        }
+        sc.close();
+	}
+
+}

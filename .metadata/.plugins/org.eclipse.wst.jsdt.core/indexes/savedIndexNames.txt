@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+D:\Coder\Eclipse-workspace\Samsung\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2020365390.index
+1319597931.index
+1072199631.index
+2859965336.index
+1873063431.index
+3509598509.index

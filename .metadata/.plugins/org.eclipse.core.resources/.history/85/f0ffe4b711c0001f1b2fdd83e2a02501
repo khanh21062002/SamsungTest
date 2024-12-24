@@ -1,0 +1,79 @@
+package PTRNLOCK;
+
+import java.util.Scanner;
+import java.util.HashSet;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(); // Số test cases
+
+        for (int t = 1; t <= T; t++) {
+            int N = sc.nextInt(); // Số mẫu hình cần kiểm tra
+            String[] patterns = new String[N];
+            
+            // Đọc các mẫu hình
+            for (int i = 0; i < N; i++) {
+                patterns[i] = sc.next();
+            }
+            
+            // Kiểm tra từng mẫu hình
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < N; i++) {
+                result.append(isValidPattern(patterns[i]) ? "1" : "0");
+            }
+            
+            System.out.println("#" + t + " " + result.toString());
+        }
+        sc.close();
+    }
+
+    private static boolean isValidPattern(String pattern) {
+        // Kiểm tra độ dài tối thiểu là 4
+        if (pattern.length() < 4) {
+            return false;
+        }
+
+        HashSet<Integer> used = new HashSet<>();
+        for (char c : pattern.toCharArray()) {
+            used.add(c - '0');
+        }
+
+        // Kiểm tra xem mỗi số chỉ xuất hiện một lần
+        if (used.size() != pattern.length()) {
+            return false;
+        }
+
+        // Kiểm tra tính hợp lệ của các kết nối
+        for (int i = 0; i < pattern.length() - 1; i++) {
+            int current = pattern.charAt(i) - '0';
+            int next = pattern.charAt(i + 1) - '0';
+            
+            // Lấy tọa độ của điểm hiện tại và điểm tiếp theo
+            int currentRow = (current - 1) / 3;
+            int currentCol = (current - 1) % 3;
+            int nextRow = (next - 1) / 3;
+            int nextCol = (next - 1) % 3;
+
+            // Kiểm tra điểm giữa nếu cần
+            if (Math.abs(currentRow - nextRow) == 2 || Math.abs(currentCol - nextCol) == 2) {
+                int middleRow = (currentRow + nextRow) / 2;
+                int middleCol = (currentCol + nextCol) / 2;
+                int middlePoint = middleRow * 3 + middleCol + 1;
+
+                // Nếu điểm giữa chưa được sử dụng trong pattern trước đó
+                if (!used.contains(middlePoint)) {
+                    return false;
+                }
+            }
+
+            // Kiểm tra đường chéo
+            if (Math.abs(currentRow - nextRow) == 1 && Math.abs(currentCol - nextCol) == 1) {
+                if (!used.contains(5)) { // Điểm giữa (5) phải được sử dụng cho đường chéo
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
